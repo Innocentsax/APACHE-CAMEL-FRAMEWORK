@@ -1,4 +1,4 @@
-package dev.Innocent.camelmicroservicea.routes;
+package dev.Innocent.camelmicroservicea.routesA;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-@Component
+// @Component
 public class MyFirstTimerRouter extends RouteBuilder {
     @Autowired
     private GetCurrentTimeBean getCurrentTimeBean;
