@@ -16,7 +16,15 @@ public class MyFirstTimerRouter extends RouteBuilder {
          */
         from("timer:first-timer")
                 //.transform().constant("my Constant Message")
-                .transform().constant("Time now is " + LocalDateTime.now())
+                //.transform().constant("Time now is " + LocalDateTime.now())
+                .bean("getCurrentTimeBean")
                 .to("log:first-timer");
+    }
+}
+
+@Component
+class GetCurrentTimeBean{
+    public String getCurrentTime(){
+        return "Time now is " + LocalDateTime.now();
     }
 }
