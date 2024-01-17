@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 public class MyFirstTimerRouter extends RouteBuilder {
     @Autowired
     private GetCurrentTimeBean getCurrentTimeBean;
+    @Autowired
+    private SimpleLoggingProcessingComponent simpleLoggingProcessingComponent;
     @Override
     public void configure() throws Exception {
         /**
@@ -26,6 +28,8 @@ public class MyFirstTimerRouter extends RouteBuilder {
                 //.transform().constant("Time now is " + LocalDateTime.now())
                 //.bean("getCurrentTimeBean")
                 .bean(getCurrentTimeBean,"getCurrentTime")
+                .log("${body}")
+                .bean(simpleLoggingProcessingComponent, "process")
                 .log("${body}")
                 .to("log:first-timer");
     }
