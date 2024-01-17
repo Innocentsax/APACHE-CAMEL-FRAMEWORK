@@ -1,5 +1,7 @@
 package dev.Innocent.camelmicroservicea.routes;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ public class MyFirstTimerRouter extends RouteBuilder {
                 .log("${body}")
                 .bean(simpleLoggingProcessingComponent, "process")
                 .log("${body}")
+                .process(new SimpleLoggingProcessor())
                 .to("log:first-timer");
     }
 }
@@ -46,6 +49,14 @@ class SimpleLoggingProcessingComponent{
     private final Logger logger = LoggerFactory.getLogger(SimpleLoggingProcessingComponent.class);
     public void process(String message){
         logger.info("SimpleLoggingProcessingComponent {}", message);
+    }
+}
+
+class SimpleLoggingProcessor implements Processor {
+    private final Logger logger = LoggerFactory.getLogger(SimpleLoggingProcessor.class);
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        logger.info("SimpleLoggingProcessor {}", exchange.getMessage().getBody());
     }
 }
 
