@@ -19,5 +19,12 @@ public class MyFileRouter extends RouteBuilder {
                 .end()
                 .log("${messageHistory} ${file:absolute.path}")
                 .to("file:files/output");
+
+        from("direct:log-file-values")
+                .log("${messageHistory} ${file:absolute.path}")
+                .log("${file:name} ${file:name.ext} ${file:name.noext} ${file:onlyname}")
+                .log("${file:onlyname.noext} ${file:parent} ${file:path} ${file:absolute}")
+                .log("${file:size} ${file:modified}")
+                .log("${routeId} ${camelId} ${body}");
     }
 }
