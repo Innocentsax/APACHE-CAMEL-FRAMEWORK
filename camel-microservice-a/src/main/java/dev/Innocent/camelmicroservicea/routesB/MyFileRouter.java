@@ -11,13 +11,13 @@ public class MyFileRouter extends RouteBuilder {
                 .routeId("Files-Input-Route")
                 .transform().body(String.class)
                 .choice()
-                    .when(simple("${file:ext} ends with 'xml'"))
+                    .when(simple("${file:ext} == 'xml'"))
                         .log("XML FILE")
                     .when(simple("${body} contains 'USD'"))
                         .log("Not an XML File but Contains USD")
                     .otherwise().log("Not an XML FILE")
                 .end()
-                .log("${messageHistory} ${headers.CamelFileAbsolute}")
+                .log("${messageHistory} ${file:absolute.path}")
                 .to("file:files/output");
     }
 }
