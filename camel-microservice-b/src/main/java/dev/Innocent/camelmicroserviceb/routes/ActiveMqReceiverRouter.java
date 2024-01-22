@@ -23,9 +23,13 @@ public class ActiveMqReceiverRouter extends RouteBuilder {
 //                .bean(myCurrencyExchangeTransformer)
 //                .to("log:received-message-from-active-mq");
 
-        from("activemq:my-activemq-xml-queue")
-                .unmarshal().jacksonXml(CurrencyExchange.class)
-                .to("log:received-message-from-active-mq");
+//        from("activemq:my-activemq-xml-queue")
+//                .unmarshal().jacksonXml(CurrencyExchange.class)
+//                .to("log:received-message-from-active-mq");
+
+        from("file:files/xml")
+                .log("${body}")
+                .to("activemq:my-activemq-xml-queue");
     }
 }
 @Component
