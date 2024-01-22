@@ -13,5 +13,9 @@ public class EpiPatternsRouter extends RouteBuilder {
         from("timer:multicast?period=10000")
                 .multicast()
                 .to("log:something1", "log:somethings2");
+
+        from("file:files/csv")
+                .split(body())
+                .to("log:split-files");
     }
 }
