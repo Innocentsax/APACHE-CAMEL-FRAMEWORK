@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 public class EpiPatternsRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-
+        from("timer:multicast?period=10000")
+                .multicast()
+                .to("log:something1", "log:somethings2");
     }
 }
