@@ -15,7 +15,11 @@ public class EpiPatternsRouter extends RouteBuilder {
                 .to("log:something1", "log:somethings2");
 
         from("file:files/csv")
+                .unmarshal().csv()
                 .split(body())
-                .to("log:split-files");
+                .to("activemq:split-queue");
+
+        from("activemq:split-queue")
+                .to("log:received-message-from-active-mq");
     }
 }
