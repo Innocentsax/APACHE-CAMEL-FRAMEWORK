@@ -56,6 +56,12 @@ public class EpiPatternsRouter extends RouteBuilder {
 
         from("direct:endpoint1")
                 .to("log:directendpoint1");
+
+        from("direct:endpoint2")
+                .to("log:directendpoint2");
+
+        from("direct:endpoint3")
+                .to("log:directendpoint3");
     }
 }
 
