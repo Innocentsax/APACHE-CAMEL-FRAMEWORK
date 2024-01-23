@@ -23,6 +23,13 @@ public class EpiPatternsRouter extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+
+        // Set tracing to see all information
+        getContext().setTracing(true);
+
+        // Handling error
+        errorHandler(deadLetterChannel("activemq:dead-letter-queue"));
+
         // Pipeline
         // Content based Routing - choice
         // Multicast
@@ -65,6 +72,7 @@ public class EpiPatternsRouter extends RouteBuilder {
                 .routingSlip(simple(routingSlip));
 
         from("direct:endpoint1")
+                .wireTap("log:wire-tap") // Use to add specify endpoint
                 .to("{{endpoint-for-logging}}");
 
         from("direct:endpoint2")
@@ -79,9 +87,6 @@ public class EpiPatternsRouter extends RouteBuilder {
          * Endpoint 2
          * Endpoint 3
          */
-
-        // Set tracing to see all information
-        getContext().setTracing(true);
 
         from("timer:dynamicRouting?period={{timePeriod}}")
                 .transform().constant("My message is hardcoded")
