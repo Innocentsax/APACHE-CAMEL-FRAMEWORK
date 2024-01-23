@@ -1,11 +1,17 @@
 package dev.Innocent.camelmicroservicea;
 
+import org.apache.camel.Body;
+import org.apache.camel.ExchangeProperties;
+import org.apache.camel.Headers;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class EpiPatternsRouter extends RouteBuilder {
@@ -106,7 +112,15 @@ class SplitterComponent{
 //    }
 //}
 
+@Component
 class DynamicRouterBean{
+    Logger logger = LoggerFactory.getLogger(DynamicRouterBean.class);
 
+    public String decideTheNextEndpoint(@ExchangeProperties Map<String, String> properties,
+                                        @Headers Map<String, String> headers, @Body String body) {
+        logger.info("{} {} {}", properties, headers, body);
+        return "direct:endpoint1";
+
+    }
 }
 
