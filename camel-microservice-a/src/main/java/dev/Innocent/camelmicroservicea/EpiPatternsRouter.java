@@ -1,6 +1,7 @@
 package dev.Innocent.camelmicroservicea;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,12 +30,22 @@ public class EpiPatternsRouter extends RouteBuilder {
 
 
         // message, message2, Message3
-        from("file:files/csv")
-//                .unmarshal().csv()
-                .convertBodyTo(String.class)
-//                .split(body(),",")
-                .split(method(splitterComponent))
-                .to("activemq:split-queue");
+//        from("file:files/csv")
+////                .unmarshal().csv()
+//                .convertBodyTo(String.class)
+////                .split(body(),",")
+//                .split(method(splitterComponent))
+//                .to("activemq:split-queue");
+
+        // Aggregate
+        // Message => Aggregate => Endpoint
+        // to, 3
+        from("file:files/aggregate-json")
+                .unmarshal().json(JsonLibrary.Jackson, CurrencyExchange.class)
+                .aggregate(simple("${body.to}"), new ArrayListAggregationStrategy())
+                .completionSize(3)
+//                .completionTimeout(HIGHEST)
+                .to("log:aggregate-json");
     }
 }
 
