@@ -80,7 +80,7 @@ public class EpiPatternsRouter extends RouteBuilder {
          * Endpoint 3
          */
 
-        from("timer:routingSlip?period=1000")
+        from("timer:dynamicRouting?period=1000")
                 .transform().constant("My message is hardcoded")
                 .dynamicRouter(method(dynamicRouterBean));
     }
@@ -115,12 +115,18 @@ class SplitterComponent{
 @Component
 class DynamicRouterBean{
     Logger logger = LoggerFactory.getLogger(DynamicRouterBean.class);
-
+    int invocations;
     public String decideTheNextEndpoint(@ExchangeProperties Map<String, String> properties,
                                         @Headers Map<String, String> headers, @Body String body) {
         logger.info("{} {} {}", properties, headers, body);
-        return "direct:endpoint1";
+        invocations++;
 
+        if(invocations%3==0)
+            return "direct:endpoint1";
+        if(invocations%3==1)
+            return "direct:endpoint2,direct:endpoint3";
+
+        return null;
     }
 }
 
