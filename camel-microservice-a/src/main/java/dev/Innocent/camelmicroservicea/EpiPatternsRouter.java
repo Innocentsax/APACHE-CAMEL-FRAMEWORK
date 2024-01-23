@@ -32,7 +32,8 @@ public class EpiPatternsRouter extends RouteBuilder {
         from("file:files/csv")
 //                .unmarshal().csv()
                 .convertBodyTo(String.class)
-                .split(body(),",")
+//                .split(body(),",")
+                .split(method(splitterComponent))
                 .to("activemq:split-queue");
     }
 }
