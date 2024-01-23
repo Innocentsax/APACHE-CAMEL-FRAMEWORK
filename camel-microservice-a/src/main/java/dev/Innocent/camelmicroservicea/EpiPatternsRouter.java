@@ -80,6 +80,9 @@ public class EpiPatternsRouter extends RouteBuilder {
          * Endpoint 3
          */
 
+        // Set tracing to see all information
+        getContext().setTracing(true);
+
         from("timer:dynamicRouting?period={{timePeriod}}")
                 .transform().constant("My message is hardcoded")
                 .dynamicRouter(method(dynamicRouterBean));
