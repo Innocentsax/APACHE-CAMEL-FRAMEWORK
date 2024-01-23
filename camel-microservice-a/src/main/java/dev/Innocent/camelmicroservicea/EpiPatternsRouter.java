@@ -46,6 +46,16 @@ public class EpiPatternsRouter extends RouteBuilder {
                 .completionSize(3)
 //                .completionTimeout(HIGHEST)
                 .to("log:aggregate-json");
+
+        String routingSlip = "direct:endpoint1,direct:endpoint2";
+        // String routingSlip = "direct:endpoint1,direct:endpoint2,direct:endpoint3"
+
+        from("timer:routingSlip?period=1000")
+                .transform().constant("My message is hardcoded")
+                .routingSlip(simple(routingSlip));
+
+        from("direct:endpoint1")
+                .to("log:directendpoint1");
     }
 }
 
