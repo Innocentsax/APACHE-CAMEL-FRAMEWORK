@@ -65,7 +65,7 @@ public class EpiPatternsRouter extends RouteBuilder {
                 .routingSlip(simple(routingSlip));
 
         from("direct:endpoint1")
-                .to("log:directendpoint1");
+                .to("{{endpoint-for-logging}}");
 
         from("direct:endpoint2")
                 .to("log:directendpoint2");
