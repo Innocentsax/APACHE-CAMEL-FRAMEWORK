@@ -11,6 +11,10 @@ import java.util.List;
 public class EpiPatternsRouter extends RouteBuilder {
     @Autowired
     SplitterComponent splitterComponent;
+
+    @Autowired
+    DynamicRouterBean dynamicRouterBean;
+
     @Override
     public void configure() throws Exception {
         // Pipeline
@@ -62,6 +66,17 @@ public class EpiPatternsRouter extends RouteBuilder {
 
         from("direct:endpoint3")
                 .to("log:directendpoint3");
+
+        /**
+         * Dynamic Routing pattern(Step 1, Step2, Step 3)
+         * Endpoint 1
+         * Endpoint 2
+         * Endpoint 3
+         */
+
+        from("timer:routingSlip?period=1000")
+                .transform().constant("My message is hardcoded")
+                .dynamicRouter(method(dynamicRouterBean));
     }
 }
 
@@ -71,3 +86,27 @@ class SplitterComponent{
         return List.of("ABC", "DEF", "GHI");
     }
 }
+
+//class DynamicRouterBean implements AggregationStrategy {
+//    @Override
+//    public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
+//        Object newBody = newExchange.getIn().getBody();
+//        ArrayList<Object> list = null;
+//        if(oldExchange == null){
+//            list = new ArrayList<Object>();
+//            list.add(newBody);
+//            newExchange.getIn().setBody(list);
+//            return newExchange;
+//        }
+//        else{
+//            list = oldExchange.getIn().getBody(ArrayList.class);
+//            list.add(newBody);
+//            return oldExchange;
+//        }
+//    }
+//}
+
+class DynamicRouterBean{
+
+}
+
