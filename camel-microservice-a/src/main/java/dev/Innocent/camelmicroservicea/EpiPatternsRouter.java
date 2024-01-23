@@ -80,7 +80,7 @@ public class EpiPatternsRouter extends RouteBuilder {
          * Endpoint 3
          */
 
-        from("timer:dynamicRouting?period=1000")
+        from("timer:dynamicRouting?period={{timePeriod}}")
                 .transform().constant("My message is hardcoded")
                 .dynamicRouter(method(dynamicRouterBean));
     }
